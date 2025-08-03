@@ -90,7 +90,7 @@ def detect_mods_dir() -> Path:
 
     # 3. 環境變數
     if "INST_MC_DIR" in os.environ:
-        return Path(os.environ["INST_MC_DIR"])
+        return Path(os.environ["INST_MC_DIR"]) / "mods"
 
     # 4. 判斷執行檔目錄是否為 Minecraft 實例資料夾
     if getattr(sys, 'frozen', False):
