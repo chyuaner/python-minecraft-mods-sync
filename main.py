@@ -57,35 +57,37 @@ from mcmods_sync import core, config
 def parse_args():
     parser = argparse.ArgumentParser(description="Minecraft mods sync script")
 
-    # PCL 模式使用
-    parser.add_argument("--inst", help="Minecraft instance path (for PCL Launcher)")
-
-    # 手動模式使用
+    # 手動指定 mods 資料夾路徑
     parser.add_argument("manual_path", nargs="?", help="Minecraft mods path (manual mode)")
+
+    # PrismCraft Launcher 使用的 instance 路徑
+    parser.add_argument("--inst", help="Minecraft instance path (for PCL Launcher)")
 
     return parser.parse_args()
 
-def detect_mc_dir():
+def detect_mods_dir() -> Path:
     args = parse_args()
 
-    # ✅ 新優先順序：手動 > --inst > 環境變數
+    # ✅ 優先順序：手動 > --inst > 環境變數
     if args.manual_path:
         return Path(args.manual_path)
+
     elif args.inst:
-        return Path(args.inst)
+        return Path(args.inst) / "mods"  # 假設 instance 路徑下有 mods 資料夾
+
     elif "INST_MC_DIR" in os.environ:
         return Path(os.environ["INST_MC_DIR"])
+
     else:
         print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
         print("請使用以下其中一種方式：")
-        print("1. 手動執行：python main.py /your/minecraft/path")
-        print("2. PCL Launcher：python main.py --inst /path")
-        print("3. Prism Launcher：設定環境變數 INST_MC_DIR")
+        print("1. 手動執行：python main.py /your/minecraft/mods")
+        print("2. PCL Launcher：python main.py --inst /your/instance/path")
+        print("3. Prism Launcher：請設定環境變數 INST_MC_DIR")
         sys.exit(1)
 
 def main():
-    mc_dir = detect_mc_dir()
-    mods_dir = mc_dir / "mods"
+    mods_dir = detect_mods_dir()
 
     if not mods_dir.exists():
         print("⚠️ mods 資料夾不存在，將自動建立")
