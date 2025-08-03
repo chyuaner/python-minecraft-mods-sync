@@ -32,16 +32,20 @@ jobs:
       # - name: Build GUI
       #   run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui
 
-      - name: Compress artifact
-        run: |
-          cd dist
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            powershell -Command "Compress-Archive -Path mcmods-sync-cli.exe -DestinationPath ../mcmods-sync-cli-windows.zip"
-          elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            zip -j ../mcmods-sync-cli-macos.zip mcmods-sync-cli
-          else
-            tar -czf ../mcmods-sync-cli-linux.tar.gz mcmods-sync-cli
-          fi
+      # Linux 壓縮
+      - name: Compress artifact (Linux)
+        if: runner.os == 'Linux'
+        run: tar -czf mcmods-sync-cli-linux.tar.gz -C dist mcmods-sync-cli
+
+      # macOS 壓縮
+      - name: Compress artifact (macOS)
+        if: runner.os == 'macOS'
+        run: zip -j mcmods-sync-cli-macos.zip dist/mcmods-sync-cli
+
+      # Windows 壓縮
+      - name: Compress artifact (Windows)
+        if: runner.os == 'Windows'
+        run: powershell -Command "Compress-Archive -Path dist\\mcmods-sync-cli.exe -DestinationPath mcmods-sync-cli-windows.zip"
 
       # 上傳未壓縮版本，供測試使用
       - name: Upload raw executable (for internal debug)
