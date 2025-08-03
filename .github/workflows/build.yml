@@ -27,7 +27,7 @@ jobs:
         run: python -m pip install -r requirements.txt pyinstaller
 
       - name: Build CLI
-        run: pyinstaller --onefile main.py --name mcmods-sync-cli
+        run: pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
 
       # - name: Build GUI
       #   run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui
