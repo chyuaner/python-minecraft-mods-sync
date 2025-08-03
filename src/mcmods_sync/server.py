@@ -3,6 +3,8 @@ from .files import getRawFilename
 from urllib.parse import urljoin
 from pathlib import Path
 import requests
+import io
+import zipfile
 
 class Server:
     # A class variable, counting the number of robots
@@ -57,6 +59,43 @@ class Server:
                     
         else:
             print(f"下載失敗: {response.status_code} "+url)
+    
+    def downloadModFileZip(self, outputCli: bool = False ):
+        extract_to = Path(config.mods_path)
+
+        url = urljoin(self.baseUrl, 'zip/mods')
+        prefix = config.prefix
+
+        if outputCli:
+            print(f"開始下載: "+url)
+        response = requests.get(url)
+        response.raise_for_status()
+        if outputCli:
+            print(f"下載完成: {response.status_code} "+url)
+
+        with zipfile.ZipFile(io.BytesIO(response.content)) as zip_file:
+            for member in zip_file.infolist():
+                if member.is_dir():
+                    continue  # 我們只處理檔案，資料夾會在建立時自動生成
+
+                # 原始路徑分解
+                original_path = Path(member.filename)
+                parts = original_path.parts
+
+                # 將每一層都加上 prefix（包含檔名）
+                new_parts = [prefix + part for part in parts]
+                new_path = extract_to.joinpath(*new_parts)
+
+                # 確保目錄存在
+                new_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # 寫入檔案
+                with zip_file.open(member) as src, open(new_path, "wb") as dst:
+                    dst.write(src.read())
+
+                if outputCli:
+                    print(f"解壓縮: " + str(new_path))
+
 
 if __name__ == "__main__":
     server = Server()

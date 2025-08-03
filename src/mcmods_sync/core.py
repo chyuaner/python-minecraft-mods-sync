@@ -11,7 +11,6 @@ def setEnv(mods_path_: str|Path, prefix_: str, url_: str):
 def reDownloadAll(outputCli: bool = False):
     fileUtils.removeAll(outputCli)
     sync(outputCli)
-    pass
 
 def get_sync_plan(client: dict[str, str], server: dict[str, str]) -> tuple[list[str], list[str], list[str]]:
     to_add = []
@@ -42,21 +41,31 @@ def sync(outputCli: bool = False):
     
     # 整理出需要處理的檔案清單
     addFilenames, updateFilenames, deleteFilenames = get_sync_plan(clientFileHashes, serverFileHashes)
-    # print(addFilenames)
 
-    # 下載新檔案、覆蓋新檔案
-    for downloadFilename in addFilenames + updateFilenames:
-        server.downloadModFile(downloadFilename, outputCli)
+    # 計算要處理的比例
+    serverFileCount = len(serverFileHashes)
+    procressCount = len(addFilenames+updateFilenames)
+
+    # 若要處理的比例過高，嘗試走 zip 打包下載模式
+    use_zip = (procressCount / serverFileCount) > 0.7
+    zip_failed = False
+
+    if use_zip:
+        try:
+            server.downloadModFileZip(outputCli)
+        except Exception as e:
+            print(f"發生錯誤，將嘗試以單一檔案形式同步：{e}")
+            zip_failed = True
+
+    # 若 zip 模式沒用 or zip 模式失敗，就逐一下載
+    if not use_zip or zip_failed:
+        for downloadFilename in addFilenames + updateFilenames:
+            server.downloadModFile(downloadFilename, outputCli)
         
     # 刪除伺服器沒有的檔案
     for deleteFilename in deleteFilenames:
         fileUtils.remove(deleteFilename, outputCli)
-
+        
 def run(outputCli: bool = False):
     sync(outputCli)
-    pass
 
-if __name__ == "__main__":
-    config.setEnv('/home/yuan/.local/share/PrismLauncher/instances/Barian/minecraft/mods/')
-    # print(config.mods_path)
-    run(True)
