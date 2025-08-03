@@ -72,3 +72,22 @@ TODO: 待補
 ```
 ./mcmods-sync-cli
 ```
+
+## 從原始碼建置並執行
+### 1. git clone 下來
+
+### 2. 建置獨立環境
+```
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+### 3. 啟動！參數帶入方式和上述 `mcmods-sync-cli` 一樣
+```
+python main.py --inst ~/.local/share/PrismLauncher/instances/<實例名稱>/minecraft
+```
+
+### 4. 打包成執行檔
+```
+pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
+```
