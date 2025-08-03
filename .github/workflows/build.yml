@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   pyinstaller-build:
@@ -32,8 +32,53 @@ jobs:
       # - name: Build GUI
       #   run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui
 
-      - name: Upload artifacts
+      - name: Compress artifact
+        run: |
+          cd dist
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            powershell -Command "Compress-Archive -Path mcmods-sync-cli.exe -DestinationPath ../mcmods-sync-cli-windows.zip"
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            zip -j ../mcmods-sync-cli-macos.zip mcmods-sync-cli
+          else
+            tar -czf ../mcmods-sync-cli-linux.tar.gz mcmods-sync-cli
+          fi
+
+      # 上傳未壓縮版本，供測試使用
+      - name: Upload raw executable (for internal debug)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-build
-          path: dist/
+          name: ${{ matrix.os }}-raw
+          path: dist/mcmods-sync-cli*
+
+      # 上傳壓縮版本，準備發佈
+      - name: Upload packaged artifact (for release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-release
+          path: |
+            mcmods-sync-cli-*.zip
+            mcmods-sync-cli-*.tar.gz
+
+  release:
+    needs: pyinstaller-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Set tag
+        id: tag
+        run: echo "tag=nightly-$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Nightly Build ${{ steps.tag.outputs.tag }}"
+          body: "Auto-built from latest master branch."
+          files: dist/**/*.zip
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
