@@ -42,9 +42,3 @@ def remove(filename : str, outputCli: bool = False):
 def removeAll(outputCli: bool = False):
     jar_files = getFilePaths()
     return {remove(getFilenameFromRawFilename(jar.name), outputCli) for jar in jar_files}
-
-if __name__ == "__main__":
-    config.setEnv('/home/yuan/.local/share/PrismLauncher/instances/Barian/minecraft/mods/', 'barian_')
-
-    removeAll(True)
-    # print(getFileHashes())

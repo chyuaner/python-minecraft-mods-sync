@@ -95,11 +95,4 @@ class Server:
 
                 if outputCli:
                     print(f"解壓縮: " + str(new_path))
-
-
-if __name__ == "__main__":
-    server = Server()
-    server.fetchMods()
-    print(server.getModFileDownloadUrls())
-
     
