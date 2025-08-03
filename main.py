@@ -65,26 +65,50 @@ def parse_args():
 
     return parser.parse_args()
 
+def is_minecraft_instance_dir(path: Path) -> bool:
+    # 必須有 mods 資料夾
+    if not (path / "mods").is_dir():
+        return False
+    # 判斷其他常見 Minecraft 實例特徵
+    has_config = (path / "config").is_dir()
+    has_logs = (path / "logs").is_dir()
+    has_options = (path / "options.txt").is_file()
+    count = sum([has_config, has_logs, has_options])
+    # 有兩個以上條件成立就認定是 Minecraft 實例資料夾
+    return count >= 2
+
 def detect_mods_dir() -> Path:
     args = parse_args()
 
-    # ✅ 優先順序：手動 > --inst > 環境變數
+    # 1. 手動參數
     if args.manual_path:
         return Path(args.manual_path)
 
-    elif args.inst:
-        return Path(args.inst) / "mods"  # 假設 instance 路徑下有 mods 資料夾
+    # 2. --inst 參數
+    if args.inst:
+        return Path(args.inst) / "mods"
 
-    elif "INST_MC_DIR" in os.environ:
+    # 3. 環境變數
+    if "INST_MC_DIR" in os.environ:
         return Path(os.environ["INST_MC_DIR"])
 
+    # 4. 判斷執行檔目錄是否為 Minecraft 實例資料夾
+    if getattr(sys, 'frozen', False):
+        exec_path = Path(sys.executable).resolve().parent
     else:
-        print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
-        print("請使用以下其中一種方式：")
-        print("1. 手動執行：python main.py /your/minecraft/mods")
-        print("2. PCL Launcher：python main.py --inst /your/instance/path")
-        print("3. Prism Launcher：請設定環境變數 INST_MC_DIR")
-        sys.exit(1)
+        exec_path = Path(__file__).resolve().parent
+
+    if is_minecraft_instance_dir(exec_path):
+        return exec_path / "mods"
+
+    # 5. 失敗提示
+    print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
+    print("請使用以下其中一種方式：")
+    print("1. 手動執行：python main.py /your/minecraft/mods")
+    print("2. PCL Launcher：python main.py --inst /your/instance/path")
+    print("3. Prism Launcher：請設定環境變數 INST_MC_DIR")
+    print("或將執行檔放置在 Minecraft 實例資料夾底下")
+    sys.exit(1)
 
 def main():
     mods_dir = detect_mods_dir()
