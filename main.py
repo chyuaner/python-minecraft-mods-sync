@@ -1,14 +1,3 @@
-# Prism Launcher:
-# 預啟動指令會在實例啟動前執行，而結束後指令則會在其結束後執行。
-# 此兩者會在啟動器的工作目錄中執行並附加額外的環境變數：
-# $INST_NAME──實例的名稱
-# $INST_ID──實例的 ID（其資料夾名稱）
-# $INST_DIR──實例的絕對路徑
-# $INST_MC_DIR──Minecraft 的絕對路徑
-# $INST_JAVA──啟動所用的 Java 執行檔
-# $INST_JAVA_ARGS──啟動所用的命令列引數
-# 包裝指令允許啟動時使用額外的包裝程式（如 Linux 中的「optirun」）
-
 #!/usr/bin/env python3
 
 import os
