@@ -35,7 +35,7 @@ jobs:
       # Linux 壓縮
       - name: Compress artifact (Linux)
         if: runner.os == 'Linux'
-        run: zip -j mcmods-sync-cli-macos.zip dist/mcmods-sync-cli
+        run: zip -j mcmods-sync-cli-linux.zip dist/mcmods-sync-cli
         # run: tar -czf mcmods-sync-cli-linux.tar.gz -C dist mcmods-sync-cli
 
       # macOS 壓縮
