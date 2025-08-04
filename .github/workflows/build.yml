@@ -26,6 +26,10 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt pyinstaller
 
+      - name: Generate UI Python files
+        run: |
+          pyside6-uic src/gui/MainWindow.ui -o src/gui/ui_mainwindow.py
+
       - name: Build CLI
         run: pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
 

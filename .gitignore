@@ -1,3 +1,6 @@
+# 忽略自動生成的 UI python 檔案
+ui_*.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

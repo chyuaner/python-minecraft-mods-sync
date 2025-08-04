@@ -81,6 +81,7 @@ TODO: 待補
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pyside6-uic src/gui/MainWindow.ui -o src/gui/ui_mainwindow.py
 ```
 ### 3. 啟動！參數帶入方式和上述 `mcmods-sync-cli` 一樣
 ```
