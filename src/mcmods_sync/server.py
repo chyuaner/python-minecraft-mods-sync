@@ -14,9 +14,11 @@ class Server:
     def __init__(self):
         pass
     
-    def fetchMods(self) -> requests.Response:
+    def fetchMods(self, outputCli: bool = False) -> requests.Response:
         url = urljoin(self.baseUrl, 'mods/?type=json')
         response = requests.get(url)
+        if outputCli:
+            print(f"連接伺服器: {response.status_code} "+url)
 
         if response.status_code == 200:
             # 預期拿到
@@ -50,8 +52,10 @@ class Server:
         url = self.getModFileDownloadUrls()[filename]
         response = requests.get(url, stream=True)
         total_length_str = response.headers.get('Content-Length')
-        if response.status_code == 200:
+        if outputCli:
+            print(f"下載: {response.status_code} "+url + " → " + str(dest_path))
 
+        if response.status_code == 200:
             downloaded_length = 0
             with open(dest_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
@@ -69,8 +73,6 @@ class Server:
                             else:
                                 progress = int(0)
                                 progress_callback(progress)
-                if outputCli:
-                    print(f"下載: {response.status_code} "+url + " → " + str(dest_path))
                     
         else:
             print(f"下載失敗: {response.status_code} "+url)

@@ -49,7 +49,7 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
     
     # 取得伺服器那邊的檔案清單與SHA1
     server = serverUtils.Server()
-    server.fetchMods()
+    server.fetchMods(outputCli)
     if should_stop and should_stop():
         raise KeyboardInterrupt("中止同步作業")
     serverFileHashes = server.getModHashes()
