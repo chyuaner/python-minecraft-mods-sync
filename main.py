@@ -54,9 +54,8 @@ from mcmods_sync import core, config
 # 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Minecraft mods sync script")
-
+def parse_args(parser = argparse.ArgumentParser(description="Minecraft mods sync script")):
+    
     # 手動指定 mods 資料夾路徑
     parser.add_argument("manual_path", nargs="?", help="Minecraft mods path (manual mode)")
 
@@ -77,8 +76,9 @@ def is_minecraft_instance_dir(path: Path) -> bool:
     # 有兩個以上條件成立就認定是 Minecraft 實例資料夾
     return count >= 2
 
-def detect_mods_dir() -> Path:
-    args = parse_args()
+def detect_mods_dir(args=None) -> Path|None:
+    if args is None:
+        args = parse_args()
 
     # 1. 手動參數
     if args.manual_path:
@@ -101,17 +101,22 @@ def detect_mods_dir() -> Path:
     if is_minecraft_instance_dir(exec_path):
         return exec_path / "mods"
 
-    # 5. 失敗提示
-    print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
-    print("請使用以下其中一種方式：")
-    print("1. 手動執行：python main.py /your/minecraft/mods")
-    print("2. PCL Launcher：python main.py --inst /your/instance/path")
-    print("3. Prism Launcher：請設定環境變數 INST_MC_DIR")
-    print("或將執行檔放置在 Minecraft 實例資料夾底下")
-    sys.exit(1)
+    # 5. 無法判斷
+    return None
 
 def main():
-    mods_dir = detect_mods_dir()
+    args = parse_args()
+    mods_dir = detect_mods_dir(args)
+
+    if mods_dir is None:
+        # 5. 失敗提示
+        print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
+        print("請使用以下其中一種方式：")
+        print("1. 手動執行：python main.py /your/minecraft/mods")
+        print("2. PCL Launcher：python main.py --inst /your/instance/path")
+        print("3. Prism Launcher：請設定環境變數 INST_MC_DIR")
+        print("或將執行檔放置在 Minecraft 實例資料夾底下")
+        sys.exit(1)
 
     if not mods_dir.exists():
         print("⚠️ mods 資料夾不存在，將自動建立")
