@@ -92,9 +92,11 @@ class MainWindow(QMainWindow):
     def on_progress(self, info: dict):
         self.ui.total_progressBar.setValue(int(info["total"] * 100))
 
-        step_label_text = f"正在處理: {info['current_step']}"
+        step_label_text = f"正在處理 {info['current_step']}"
         if info["file_count"] > 0:
             step_label_text += f" ({info['file_index']+1}/{info['file_count']})"
+        if info.get('current_filename'):
+            step_label_text += ": " + info['current_filename']
         self.ui.step_label.setText(step_label_text)
         # self.ui.step_progressBar.setValue(int(info["step_progress"] * 100))
 

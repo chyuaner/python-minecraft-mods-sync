@@ -16,6 +16,7 @@ class ProgressManager:
 
         self.step_progress: float = 0.0
         self.file_progress: float = 0.0
+        self.current_filename: str | None = None
         self.file_count: int = 0
         self.file_index: int = 0
 
@@ -59,6 +60,7 @@ class ProgressManager:
             "file_index": self.file_index,
             "file_count": self.file_count,
             "file_progress": self.file_progress,
+            "current_filename": self.current_filename,  # 新增
             "step_progress": self.step_progress,
             "steps": {
                 name: {

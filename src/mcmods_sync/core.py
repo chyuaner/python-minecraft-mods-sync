@@ -107,6 +107,8 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
             def file_progress_cb(pct):
                 # 更新檔案進度 (pct: 0~100)
                 pm.update_file_progress(0, pct / 100)
+                pm.current_filename = 'all_mods.zip'  # ← 設定目前檔案名
+
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
             if should_stop and should_stop():
@@ -127,6 +129,8 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
             def file_progress_cb(pct):
                 # 更新檔案進度 (pct: 0~100)
                 pm.update_file_progress(i, pct / 100)
+                pm.current_filename = downloadFilename  # ← 設定目前檔案名
+
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
             server.downloadModFile(downloadFilename, outputCli=outputCli, progress_callback=file_progress_cb, should_stop=should_stop)
