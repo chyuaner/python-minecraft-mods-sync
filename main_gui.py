@@ -2,8 +2,9 @@
 import os
 import sys
 import argparse
+from pathlib import Path
 from main import main as run_cli, parse_args as parse_args_cli, detect_mods_dir  # 匯入 CLI 模式邏輯
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QDialog, QMessageBox
 
 # 加入 src 目錄到 path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
@@ -23,7 +24,35 @@ def parse_args():
     return parse_args_cli(parser)
 
 def main():
+    # print(mods_dir)
+    global mods_dir
+
     app = QApplication(sys.argv)
+    if mods_dir is None:
+        window = QMainWindow()
+        folderPath = QFileDialog.getExistingDirectory(window, "選擇 Minecraft mods 資料夾")
+        if folderPath:
+            mods_dir = Path(folderPath)
+        else:
+            print("❌ 使用者未選擇資料夾，程式中止")
+
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Icon.Critical)
+            msgBox.setWindowTitle("無法繼續執行")
+            msgBox.setText(
+                "無法判斷 Minecraft mods 資料夾路徑！\n"
+                "請先選擇 Mods 資料夾\n\n"
+                "或是使用以下其中一種方式：\n"
+                "1. 手動執行：python main.py /your/minecraft/mods\n"
+                "2. PCL Launcher：python main.py --inst /your/instance/path\n"
+                "3. Prism Launcher：請設定環境變數 INST_MC_DIR\n"
+                "或將執行檔放置在 Minecraft 實例資料夾底下"
+            )
+            msgBox.exec()
+            sys.exit(1)
+        # mods_dir = folderPath
+        # if mods_dir is None:
+
     win = MainWindow()
     win.show()
     sys.exit(app.exec())
