@@ -74,12 +74,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </layout>
        </item>
        <item>
-        <widget class="QProgressBar" name="step_progressBar">
+        <widget class="QProgressBar" name="file_progressBar">
          <property name="value">
           <number>24</number>
          </property>
         </widget>
        </item>
+       <!-- <item>
+        <widget class="QProgressBar" name="step_progressBar">
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item> -->
       </layout>
      </widget>
     </item>
