@@ -5,6 +5,8 @@ from pathlib import Path
 import requests
 import io
 import zipfile
+from urllib.parse import unquote, unquote_to_bytes
+import re
 
 class Server:
     # A class variable, counting the number of robots
@@ -77,7 +79,23 @@ class Server:
         else:
             print(f"下載失敗: {response.status_code} "+url)
     
-    def downloadModFileZip(self, outputCli: bool = False, progress_callback=None, should_stop=None):
+    def downloadModFileZip(self, outputCli: bool = False, progress_callback=None, should_stop=None, filename_holder: list[str] = None):
+        def extract_filename_from_disposition(disposition: str) -> str:
+            # RFC 5987: filename*=UTF-8''...
+            match = re.search(r"filename\*\s*=\s*(?:UTF-8'')?([^;\r\n]+)", disposition, re.IGNORECASE)
+            if match:
+                try:
+                    return unquote_to_bytes(match.group(1)).decode("utf-8")
+                except Exception as e:
+                    print(f"[解析錯誤] filename* 無法解碼：{e}")
+
+            # fallback: filename="..."
+            match = re.search(r'filename="?([^";\r\n]+)"?', disposition)
+            if match:
+                return match.group(1)  # 通常是 ASCII，直接回傳即可
+
+            return "all_mods.zip"
+
         extract_to = Path(config.mods_path)
         url = urljoin(self.baseUrl, 'zip/mods')
         prefix = config.prefix
@@ -90,6 +108,12 @@ class Server:
 
         total_length_str = response.headers.get('Content-Length')
         total_length = int(total_length_str) if total_length_str and total_length_str.isdigit() else None
+
+        disposition = response.headers.get('Content-Disposition', '')
+        filename = extract_filename_from_disposition(disposition)
+
+        if filename_holder is not None and isinstance(filename_holder, list) and len(filename_holder) > 0:
+            filename_holder[0] = filename
 
         buffer = io.BytesIO()
         downloaded_length = 0

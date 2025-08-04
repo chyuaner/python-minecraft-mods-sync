@@ -104,16 +104,17 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
             pm.start_step("download", file_count=1)
 
             # 製作回報進度用callback
+            filename_holder = ['all_mods.zip']
             def file_progress_cb(pct):
                 # 更新檔案進度 (pct: 0~100)
                 pm.update_file_progress(0, pct / 100)
-                pm.current_filename = 'all_mods.zip'  # ← 設定目前檔案名
+                pm.current_filename = filename_holder[0]
 
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
             if should_stop and should_stop():
                 raise KeyboardInterrupt("中止同步作業")
-            server.downloadModFileZip(outputCli, progress_callback=file_progress_cb, should_stop=should_stop)
+            server.downloadModFileZip(outputCli, progress_callback=file_progress_cb, should_stop=should_stop, filename_holder=filename_holder)
 
         except Exception as e:
             print(f"發生錯誤，將嘗試以單一檔案形式同步：{e}")
