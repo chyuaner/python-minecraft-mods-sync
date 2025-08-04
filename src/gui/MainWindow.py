@@ -25,10 +25,11 @@ class MainWindow(QMainWindow):
         # 建立 stream 並連接
         self.output_stream = EmittingStream()
         self.output_stream.text_written.connect(self.append_text)
-        sys.stdout = self.output_stream
-        sys.stderr = self.output_stream
+        # sys.stdout = self.output_stream
+        # sys.stderr = self.output_stream
 
         # 替換 stdout 和 stderr
+        self.ui.output_textBrowser.setText("")
         sys.stdout = DualStream(self.output_stream, sys.__stdout__)
         sys.stderr = DualStream(self.output_stream, sys.__stderr__)
 
