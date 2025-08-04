@@ -2,13 +2,14 @@ from . import config
 
 from . import files as fileUtils
 from . import server as serverUtils
+from .ProgressManager import ProgressManager
 from pathlib import Path
 
 
 def setEnv(mods_path_: str|Path, prefix_: str, url_: str):
     config.setEnv(mods_path_, prefix_, url_)
 
-def reDownloadAll(outputCli: bool = False):
+def reDownloadAll(outputCli: bool = False, progress_callback=None):
     fileUtils.removeAll(outputCli)
     sync(outputCli)
 
@@ -30,7 +31,14 @@ def get_sync_plan(client: dict[str, str], server: dict[str, str]) -> tuple[list[
 
     return to_add, to_update, to_delete
 
-def sync(outputCli: bool = False):
+def sync(outputCli: bool = False, progress_callback=None):
+    steps = {
+        "fetch_mods": 0.1,
+        "download": 0.7,
+        "delete": 0.2,
+    }
+    pm = ProgressManager(steps)
+    
     # 取得伺服器那邊的檔案清單與SHA1
     server = serverUtils.Server()
     server.fetchMods()
@@ -44,27 +52,53 @@ def sync(outputCli: bool = False):
 
     # 計算要處理的比例
     serverFileCount = len(serverFileHashes)
-    procressCount = len(addFilenames+updateFilenames)
+    processCount = len(addFilenames+updateFilenames)
+
+    # 模擬 fetch_mods 100% 完成
+    pm.update_step_progress(1.0)
+    if progress_callback:
+        progress_callback(pm.get_progress_info())
+
+    # 下載步驟開始
+    pm.start_step("download", file_count=processCount)
 
     # 若要處理的比例過高，嘗試走 zip 打包下載模式
-    use_zip = (procressCount / serverFileCount) > 0.7
+    use_zip = (processCount / serverFileCount) > 0.7
     zip_failed = False
 
     if use_zip:
         try:
             server.downloadModFileZip(outputCli)
+
+            # 整包下載視為完成整個下載步驟
+            pm.update_step_progress(1.0)
+            if progress_callback:
+                progress_callback(pm.get_progress_info())
+
         except Exception as e:
             print(f"發生錯誤，將嘗試以單一檔案形式同步：{e}")
             zip_failed = True
 
     # 若 zip 模式沒用 or zip 模式失敗，就逐一下載
     if not use_zip or zip_failed:
-        for downloadFilename in addFilenames + updateFilenames:
-            server.downloadModFile(downloadFilename, outputCli)
+        for i, downloadFilename in enumerate(addFilenames + updateFilenames):
+
+            # 製作回報進度用callback
+            def file_progress_cb(pct):
+                # 更新檔案進度 (pct: 0~100)
+                pm.update_file_progress(i, pct / 100)
+                if progress_callback:
+                    progress_callback(pm.get_progress_info())
+
+            server.downloadModFile(downloadFilename, outputCli=outputCli, progress_callback=file_progress_cb)
         
     # 刪除伺服器沒有的檔案
-    for deleteFilename in deleteFilenames:
+    pm.start_step("delete", file_count=len(deleteFilenames))
+    for i, deleteFilename in enumerate(deleteFilenames):
         fileUtils.remove(deleteFilename, outputCli)
+        pm.update_file_progress(i, 1.0)
+        if progress_callback:
+            progress_callback(pm.get_progress_info())
         
 def run(outputCli: bool = False):
     sync(outputCli)

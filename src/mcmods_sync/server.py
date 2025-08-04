@@ -43,24 +43,37 @@ class Server:
         download_dict = { mod["filename"]: mod["downloadUrl"] for mod in self.modsList }
         return download_dict
 
-    def downloadModFile(self, filename: str, outputCli: bool = False ):
+    def downloadModFile(self, filename: str, outputCli: bool = False, progress_callback = None):
 
         rawFilename = getRawFilename(filename)
         dest_path = Path(config.mods_path) / rawFilename
         url = self.getModFileDownloadUrls()[filename]
         response = requests.get(url, stream=True)
+        total_length_str = response.headers.get('Content-Length')
         if response.status_code == 200:
+
+            downloaded_length = 0
             with open(dest_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
                         f.write(chunk)
+                        downloaded_length += len(chunk)
+
+                        if progress_callback:
+                            if total_length_str is not None:
+                                total_length = int(total_length_str)
+                                progress = int(downloaded_length / total_length * 100)
+                                progress_callback(progress)
+                            else:
+                                progress = int(0)
+                                progress_callback(progress)
                 if outputCli:
                     print(f"下載: {response.status_code} "+url + " → " + str(dest_path))
                     
         else:
             print(f"下載失敗: {response.status_code} "+url)
     
-    def downloadModFileZip(self, outputCli: bool = False ):
+    def downloadModFileZip(self, outputCli: bool = False, progress_callback = None):
         extract_to = Path(config.mods_path)
 
         url = urljoin(self.baseUrl, 'zip/mods')
@@ -68,7 +81,8 @@ class Server:
 
         if outputCli:
             print(f"開始下載: "+url)
-        response = requests.get(url)
+        response = requests.get(url, stream=True)
+        total_length_str = response.headers.get('Content-Length')
         response.raise_for_status()
         if outputCli:
             print(f"下載完成: {response.status_code} "+url)

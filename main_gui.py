@@ -52,8 +52,10 @@ def main():
             sys.exit(1)
             
     config.setEnv(mods_dir)
+
     win = MainWindow()
     win.show()
+    win.start_sync()
     app.exec()
     sys.exit(win.exit_code)
 
