@@ -197,6 +197,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </item>
         <item>
          <widget class="QPushButton" name="skip_pBtn">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;跳過下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，但是不阻止Minecraft啟動器，繼續啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 0狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
            <string>跳過下載</string>
           </property>
@@ -204,6 +207,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </item>
         <item>
          <widget class="QPushButton" name="cancel_pBtn">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;取消下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，並不啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 1狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
            <string>取消</string>
           </property>
