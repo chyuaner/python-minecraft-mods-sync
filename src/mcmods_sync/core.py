@@ -31,7 +31,7 @@ def get_sync_plan(client: dict[str, str], server: dict[str, str]) -> tuple[list[
 
     return to_add, to_update, to_delete
 
-def sync(outputCli: bool = False, progress_callback=None):
+def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
     # 原始權重設定（可視需求調整）
     base_weights = {
         "fetch_mods": 0.1,
@@ -50,10 +50,14 @@ def sync(outputCli: bool = False, progress_callback=None):
     # 取得伺服器那邊的檔案清單與SHA1
     server = serverUtils.Server()
     server.fetchMods()
+    if should_stop and should_stop():
+        raise KeyboardInterrupt("中止同步作業")
     serverFileHashes = server.getModHashes()
 
     # 列出客戶端的檔案清單與SHA1
     clientFileHashes = fileUtils.getFileHashes()
+    if should_stop and should_stop():
+        raise KeyboardInterrupt("中止同步作業")
     
     # 整理出需要處理的檔案清單
     addFilenames, updateFilenames, deleteFilenames = get_sync_plan(clientFileHashes, serverFileHashes)
@@ -87,6 +91,8 @@ def sync(outputCli: bool = False, progress_callback=None):
     pm.update_step_progress(1.0)
     if progress_callback:
         progress_callback(pm.get_progress_info())
+    if should_stop and should_stop():
+        raise KeyboardInterrupt("中止同步作業")
 
     # 下載步驟開始
     # 若要處理的比例過高，嘗試走 zip 打包下載模式
@@ -103,7 +109,9 @@ def sync(outputCli: bool = False, progress_callback=None):
                 pm.update_file_progress(0, pct / 100)
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
-            server.downloadModFileZip(outputCli, progress_callback=file_progress_cb)
+            if should_stop and should_stop():
+                raise KeyboardInterrupt("中止同步作業")
+            server.downloadModFileZip(outputCli, progress_callback=file_progress_cb, should_stop=should_stop)
 
         except Exception as e:
             print(f"發生錯誤，將嘗試以單一檔案形式同步：{e}")
@@ -113,13 +121,15 @@ def sync(outputCli: bool = False, progress_callback=None):
     if not use_zip or zip_failed:
         pm.start_step("download", file_count=processCount)
         for i, downloadFilename in enumerate(addFilenames + updateFilenames):
+            if should_stop and should_stop():
+                raise KeyboardInterrupt("中止同步作業")
             # 製作回報進度用callback
             def file_progress_cb(pct):
                 # 更新檔案進度 (pct: 0~100)
                 pm.update_file_progress(i, pct / 100)
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
-            server.downloadModFile(downloadFilename, outputCli=outputCli, progress_callback=file_progress_cb)
+            server.downloadModFile(downloadFilename, outputCli=outputCli, progress_callback=file_progress_cb, should_stop=should_stop)
         
     # 刪除伺服器沒有的檔案
     pm.start_step("delete", file_count=len(deleteFilenames))
@@ -130,6 +140,8 @@ def sync(outputCli: bool = False, progress_callback=None):
             progress_callback(pm.get_progress_info())
     else:
         for i, deleteFilename in enumerate(deleteFilenames):
+            if should_stop and should_stop():
+                raise KeyboardInterrupt("中止同步作業")
             fileUtils.remove(deleteFilename, outputCli)
             pm.update_file_progress(i, 1.0)
             if progress_callback:

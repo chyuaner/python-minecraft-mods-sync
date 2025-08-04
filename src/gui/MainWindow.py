@@ -54,13 +54,19 @@ class MainWindow(QMainWindow):
         self.close()
 
     def closeEvent(self, event):
-        if self.isSkip:
-            event.accept()
-            self.exit_code = 0  # 設定你想傳出的退出碼
-
+        if hasattr(self, "sync_thread") and self.sync_thread.isRunning():
+            self.sync_thread.requestInterruption()
+            # 等 thread 結束，阻塞 UI 不太好，可用非阻塞提示用戶
+            self.sync_thread.finished.connect(lambda: self.close())  # 結束後再關閉
+            event.ignore()  # 先不關閉視窗
         else:
-            event.accept()  # ✅ 先讓 Qt 結束事件流程
-            self.exit_code = 1  # 設定你想傳出的退出碼
+            if self.isSkip:
+                event.accept()
+                self.exit_code = 0  # 設定你想傳出的退出碼
+
+            else:
+                event.accept()  # ✅ 先讓 Qt 結束事件流程
+                self.exit_code = 1  # 設定你想傳出的退出碼
 
     def start_sync(self):
         self.sync_thread = QThread()

@@ -1,5 +1,5 @@
-from mcmods_sync import  ProgressManager
-from PySide6.QtCore import QObject, Signal
+from mcmods_sync import core
+from PySide6.QtCore import QObject, Signal, QThread
 
 class SyncWorker(QObject):
     progress = Signal(dict)
@@ -9,10 +9,20 @@ class SyncWorker(QObject):
         super().__init__()
 
     def run(self):
-        # 傳入 self.progress.emit 作為 callback 來回報進度
-        print("worker start")
-        from mcmods_sync import core
-        core.sync(outputCli=True, progress_callback=self.progress.emit)
+        # 拿到目前的 thread 實體
+        thread = QThread.currentThread()
 
-        # core.sync(outputCli=True, progress_callback=None)
-        self.finished.emit()
+        # 傳入中斷檢查函式
+        def should_stop():
+            return thread.isInterruptionRequested()
+
+        try:
+            core.sync(
+                outputCli=True,
+                progress_callback=self.progress.emit,
+                should_stop=should_stop
+            )
+        except KeyboardInterrupt:
+            print("Sync 被中止")
+        finally:
+            self.finished.emit()

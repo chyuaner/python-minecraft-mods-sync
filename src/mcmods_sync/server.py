@@ -43,7 +43,7 @@ class Server:
         download_dict = { mod["filename"]: mod["downloadUrl"] for mod in self.modsList }
         return download_dict
 
-    def downloadModFile(self, filename: str, outputCli: bool = False, progress_callback = None):
+    def downloadModFile(self, filename: str, outputCli: bool = False, progress_callback = None, should_stop=None):
 
         rawFilename = getRawFilename(filename)
         dest_path = Path(config.mods_path) / rawFilename
@@ -55,6 +55,8 @@ class Server:
             downloaded_length = 0
             with open(dest_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
+                    if should_stop and should_stop():
+                        raise KeyboardInterrupt("中止同步作業")
                     if chunk:
                         f.write(chunk)
                         downloaded_length += len(chunk)
@@ -73,7 +75,7 @@ class Server:
         else:
             print(f"下載失敗: {response.status_code} "+url)
     
-    def downloadModFileZip(self, outputCli: bool = False, progress_callback=None):
+    def downloadModFileZip(self, outputCli: bool = False, progress_callback=None, should_stop=None):
         extract_to = Path(config.mods_path)
         url = urljoin(self.baseUrl, 'zip/mods')
         prefix = config.prefix
@@ -91,6 +93,8 @@ class Server:
         downloaded_length = 0
 
         for chunk in response.iter_content(chunk_size=8192):
+            if should_stop and should_stop():
+                raise KeyboardInterrupt("中止同步作業")
             if chunk:
                 buffer.write(chunk)
                 downloaded_length += len(chunk)
@@ -108,6 +112,8 @@ class Server:
 
         with zipfile.ZipFile(buffer) as zip_file:
             for member in zip_file.infolist():
+                if should_stop and should_stop():
+                    raise KeyboardInterrupt("中止同步作業")
                 if member.is_dir():
                     continue
 
