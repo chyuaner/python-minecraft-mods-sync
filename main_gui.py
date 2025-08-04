@@ -10,6 +10,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QDialog, Q
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 
 from gui.MainWindow import MainWindow
+from mcmods_sync import core, config
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Minecraft mods sync script")
@@ -34,8 +35,7 @@ def main():
         if folderPath:
             mods_dir = Path(folderPath)
         else:
-            print("❌ 使用者未選擇資料夾，程式中止")
-
+            # ❌ 使用者未選擇資料夾，程式中止
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Icon.Critical)
             msgBox.setWindowTitle("無法繼續執行")
@@ -50,12 +50,12 @@ def main():
             )
             msgBox.exec()
             sys.exit(1)
-        # mods_dir = folderPath
-        # if mods_dir is None:
-
+            
+    config.setEnv(mods_dir)
     win = MainWindow()
     win.show()
-    sys.exit(app.exec())
+    app.exec()
+    sys.exit(win.exit_code)
 
 if __name__ == '__main__':
     if "--cli" in sys.argv:
