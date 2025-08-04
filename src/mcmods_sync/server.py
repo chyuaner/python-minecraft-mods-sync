@@ -73,37 +73,49 @@ class Server:
         else:
             print(f"下載失敗: {response.status_code} "+url)
     
-    def downloadModFileZip(self, outputCli: bool = False, progress_callback = None):
+    def downloadModFileZip(self, outputCli: bool = False, progress_callback=None):
         extract_to = Path(config.mods_path)
-
         url = urljoin(self.baseUrl, 'zip/mods')
         prefix = config.prefix
 
         if outputCli:
-            print(f"開始下載: "+url)
-        response = requests.get(url, stream=True)
-        total_length_str = response.headers.get('Content-Length')
-        response.raise_for_status()
-        if outputCli:
-            print(f"下載完成: {response.status_code} "+url)
+            print(f"開始下載: " + url)
 
-        with zipfile.ZipFile(io.BytesIO(response.content)) as zip_file:
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+
+        total_length_str = response.headers.get('Content-Length')
+        total_length = int(total_length_str) if total_length_str and total_length_str.isdigit() else None
+
+        buffer = io.BytesIO()
+        downloaded_length = 0
+
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                buffer.write(chunk)
+                downloaded_length += len(chunk)
+
+                if progress_callback and total_length:
+                    progress = downloaded_length / total_length
+                    # progress_callback 期待0~1或0~100？
+                    # 假設0~100
+                    progress_callback(int(progress * 100))
+
+        if outputCli:
+            print(f"下載完成: {response.status_code} " + url)
+
+        buffer.seek(0)  # 重設指標到開頭
+
+        with zipfile.ZipFile(buffer) as zip_file:
             for member in zip_file.infolist():
                 if member.is_dir():
-                    continue  # 我們只處理檔案，資料夾會在建立時自動生成
+                    continue
 
-                # 原始路徑分解
                 original_path = Path(member.filename)
-                parts = original_path.parts
-
-                # 將每一層都加上 prefix（包含檔名）
-                new_parts = [prefix + part for part in parts]
+                new_parts = [prefix + part for part in original_path.parts]
                 new_path = extract_to.joinpath(*new_parts)
-
-                # 確保目錄存在
                 new_path.parent.mkdir(parents=True, exist_ok=True)
 
-                # 寫入檔案
                 with zip_file.open(member) as src, open(new_path, "wb") as dst:
                     dst.write(src.read())
 

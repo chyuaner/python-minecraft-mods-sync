@@ -89,20 +89,21 @@ def sync(outputCli: bool = False, progress_callback=None):
         progress_callback(pm.get_progress_info())
 
     # 下載步驟開始
-    pm.start_step("download", file_count=processCount)
-
     # 若要處理的比例過高，嘗試走 zip 打包下載模式
     use_zip = (processCount / serverFileCount) > 0.7
     zip_failed = False
 
     if use_zip:
         try:
-            server.downloadModFileZip(outputCli)
+            pm.start_step("download", file_count=1)
 
-            # 整包下載視為完成整個下載步驟
-            pm.update_step_progress(1.0)
-            if progress_callback:
-                progress_callback(pm.get_progress_info())
+            # 製作回報進度用callback
+            def file_progress_cb(pct):
+                # 更新檔案進度 (pct: 0~100)
+                pm.update_file_progress(0, pct / 100)
+                if progress_callback:
+                    progress_callback(pm.get_progress_info())
+            server.downloadModFileZip(outputCli, progress_callback=file_progress_cb)
 
         except Exception as e:
             print(f"發生錯誤，將嘗試以單一檔案形式同步：{e}")
@@ -110,15 +111,14 @@ def sync(outputCli: bool = False, progress_callback=None):
 
     # 若 zip 模式沒用 or zip 模式失敗，就逐一下載
     if not use_zip or zip_failed:
+        pm.start_step("download", file_count=processCount)
         for i, downloadFilename in enumerate(addFilenames + updateFilenames):
-
             # 製作回報進度用callback
             def file_progress_cb(pct):
                 # 更新檔案進度 (pct: 0~100)
                 pm.update_file_progress(i, pct / 100)
                 if progress_callback:
                     progress_callback(pm.get_progress_info())
-
             server.downloadModFile(downloadFilename, outputCli=outputCli, progress_callback=file_progress_cb)
         
     # 刪除伺服器沒有的檔案
