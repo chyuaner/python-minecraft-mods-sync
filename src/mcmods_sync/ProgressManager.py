@@ -2,6 +2,9 @@
 
 class ProgressManager:
     def __init__(self, step_weights: dict[str, float]):
+        self.set_weights(step_weights)
+
+    def set_weights(self, step_weights: dict[str, float]):
         total = sum(step_weights.values()) or 1
         self.steps = {
             step: {

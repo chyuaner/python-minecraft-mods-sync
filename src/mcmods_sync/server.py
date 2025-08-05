@@ -128,20 +128,31 @@ class Server:
                 if progress_callback and total_length:
                     progress = downloaded_length / total_length
                     # progress_callback 期待0~1或0~100？
-                    # 假設0~100
-                    progress_callback(int(progress * 100))
+                    progress_callback({
+                        "stage": "download",
+                        "progress": int(progress * 100),
+                    })
 
         if outputCli:
             print(f"下載完成: {response.status_code} " + url)
 
         buffer.seek(0)  # 重設指標到開頭
 
+        # --- ZIP 解壓縮階段 ---
         with zipfile.ZipFile(buffer) as zip_file:
-            for member in zip_file.infolist():
+            members = [m for m in zip_file.infolist() if not m.is_dir()]
+            total_files = len(members)
+            extracted_count = 0
+
+            if progress_callback:
+                progress_callback({
+                    "stage": "start_extract",
+                    "file_count": total_files
+                })
+
+            for member in members:
                 if should_stop and should_stop():
                     raise KeyboardInterrupt("中止同步作業")
-                if member.is_dir():
-                    continue
 
                 original_path = Path(member.filename)
                 new_parts = [prefix + part for part in original_path.parts]
@@ -151,6 +162,23 @@ class Server:
                 with zip_file.open(member) as src, open(new_path, "wb") as dst:
                     dst.write(src.read())
 
+                extracted_count += 1
+
                 if outputCli:
-                    print(f"解壓縮: " + str(new_path))
+                    print(f"解壓縮: {new_path}")
+
+                if progress_callback:
+                    progress_callback({
+                        "stage": "extract",
+                        "progress": extracted_count / total_files,
+                        "current_file": str(member.filename),
+                        "done_files": extracted_count,
+                        "total_files": total_files,
+                    })
+
+            # ✅ 解壓縮完成，標記 extract_zip 步驟為 100%
+            if progress_callback:
+                progress_callback({
+                    "stage": "extract_complete"
+                })
     

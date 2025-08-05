@@ -117,7 +117,10 @@ class MainWindow(QMainWindow):
         self.ui.step_label.setText(step_label_text)
         # self.ui.step_progressBar.setValue(int(info["step_progress"] * 100))
 
-        self.ui.file_progressBar.setValue(int(info["file_progress"] * 100))
+        if int(info["file_progress"] * 100) == 0 and int(info["step_progress"] * 100) > 0:
+            self.ui.file_progressBar.setValue(int(info["step_progress"] * 100))
+        else:
+            self.ui.file_progressBar.setValue(int(info["file_progress"] * 100))
 
     def on_finished(self, success: bool):
         print("同步完成" if success else "同步被中斷")
