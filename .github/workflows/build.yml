@@ -77,7 +77,7 @@ jobs:
       - name: Upload GUI raw executable (for internal debug)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-raw
+          name: ${{ matrix.os }}-gui-raw
           path: dist/mcmods-sync-gui*
 
       # 上傳壓縮版本，準備發佈
