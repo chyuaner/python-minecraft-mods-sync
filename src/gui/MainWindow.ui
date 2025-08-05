@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>508</height>
+    <width>1301</width>
+    <height>737</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Berian Minecraft Mods Sync同步程式</string>
@@ -16,24 +22,143 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="QGroupBox" name="output_layout">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QTextBrowser" name="output_textBrowser">
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+     <layout class="QVBoxLayout" name="info_layout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>首頁: </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_17">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>https://mcweb.barian.moe</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::TextFormat::MarkdownText</enum>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>API URL: </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="apiurl_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="cursor">
+             <cursorShape>IBeamCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string>https://api-minecraft.yuaner.tw/</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::TextFormat::MarkdownText</enum>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>要同步的模組資料夾：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="modsFolder_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="cursor">
+             <cursorShape>IBeamCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;file:///home/yuan/.local/share/PrismLauncher/instances/Barian/minecraft/mods/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;/home/yuan/.local/share/PrismLauncher/instances/Barian/minecraft/mods/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::TextFormat::MarkdownText</enum>
+            </property>
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,0">
+      <item>
+       <widget class="QGroupBox" name="output_layout">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QTextBrowser" name="output_textBrowser">
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -41,11 +166,217 @@ li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;開始下載: https://api-minecraft.yuaner.tw/zip/mods &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;下載完成: 200 https://api-minecraft.yuaner.tw/zip/mods &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_invocore-1.21.1-5.2.4.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_Patchouli-1.21-88-NEOFORGE(1).jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_txnilib-neoforge-1.0.24-1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_grind-enchantments-4.0.1+neoforge-1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_bowinfinityfix-1.21-neo-3.1.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_sit-1.21.1-1.4.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[幽邃黑暗] deeperdarker-neoforge-1.21.1-1.3.5.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_skinrestorer-2.1.0+1.21-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_mvs-4.3.0-1.21.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_architectury-13.0.8-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_-damage-optimization-1.0.0+1.21.3.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_revive_me-1.21.1-5.4.5.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_immersive_melodies-neoforge-0.6.2+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_deep_aether-1.21.1-1.1.2.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_Storage Drawers-neoforge-1.21-13.8.9.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_YungsBetterDungeons-1.21.1-NeoForge-5.1.4.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_lionfishapi-2.6.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_YungsBetterOceanMonuments-1.21.1-NeoForge-4.1.2.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_forgified-fabric-api-0.115.6+2.1.1+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_owo-lib-neoforge-0.12.15.1-beta.5+1.21.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_enchlevel-langpatch-3.0.0.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_TerraBlender-neoforge-1.21.1-4.1.0.8.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[暮色森林] twilightforest-1.21.1-4.7.3196-universal.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_prickle-neoforge-1.21.1-21.1.8.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[天境] aether-1.21.1-1.5.8-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_disenchanting_table-merged-1.21.1-5.0.2.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_ExplorersCompass-1.21.1-3.0.3-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_player-animation-lib-forge-2.0.1+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_YungsApi-1.21.1-NeoForge-5.1.6.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[超多生物群系] BiomesOPlenty-neoforge-1.21.1-21.1.0.12.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_L_Ender's Cataclysm 1.21.1-3.08.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[天境村庄] AetherVillages-1.21.1-1.0.8-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_NaturesCompass-1.21.1-3.0.3-neoforge.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_monolib-neoforge-1.21.1-2.1.0.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_YungsBetterDesertTemples-1.21.1-NeoForge-4.1.5.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[JEI物品管理器] jei-1.21.1-neoforge-19.21.2.313.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_bookshelf-neoforge-1.21.1-21.1.67.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_mending-+-infinity-(by-uiinpui)-1.21.7.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_curios-neoforge-9.5.1+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_geckolib-neoforge-1.21.1-4.7.6.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_caelus-neoforge-7.0.1+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_GlitchCore-neoforge-1.21.1-2.1.0.0.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[鞘翅槽位] elytraslot-neoforge-9.0.2+1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_TravelersTitles-1.21.1-NeoForge-5.1.3.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_YungsBetterJungleTemples-1.21.1-NeoForge-3.1.2.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_Placebo-1.21.1-9.9.0.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_irons_spellbooks-1.21.1-3.14.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[天空村庄] SkyVillages-1.0.6-1.21.x-neoforge-release.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_worldedit-mod-7.3.8(1).jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_ApothicAttributes-1.21.1-2.9.0.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_Ping-Wheel-1.10.3-neoforge-1.21.1.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_[Xaero的小地图] Xaeros_Minimap_25.2.6_NeoForge_1.21.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_enchdesc-neoforge-1.21.1-21.1.7.jar &lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000; background-color:#ffffff;&quot;&gt;解壓縮: minecraft/barian_beyondenchant-1.5.0.jar&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="extra_layout">
+        <item>
+         <widget class="QWidget" name="extra_widget" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="step_widget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>步驟</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QListView" name="listView">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Ignored" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>80</height>
+                 </size>
+                </property>
+                <property name="isWrapping" stdset="0">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>資訊細節</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <layout class="QFormLayout" name="formLayout">
+                  <property name="labelAlignment">
+                   <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>檔名開頭:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="prefix_label">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="cursor">
+                     <cursorShape>IBeamCursor</cursorShape>
+                    </property>
+                    <property name="text">
+                     <string>barian_</string>
+                    </property>
+                    <property name="textInteractionFlags">
+                     <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>指定資料夾方式:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Prism Launcher 環境變數</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_12">
+                    <property name="text">
+                     <string>下載方式:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>add</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>update</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>delete</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="1">
+                   <widget class="QLabel" name="label_11">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="label_13">
+                    <property name="text">
+                     <string>ZIP整包下載</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_14">
+                    <property name="text">
+                     <string>all mods:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>53</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QGroupBox" name="step_layout">
@@ -80,13 +411,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </property>
         </widget>
        </item>
-       <!-- <item>
-        <widget class="QProgressBar" name="step_progressBar">
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-       </item> -->
       </layout>
      </widget>
     </item>
@@ -95,104 +419,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
       <property name="topMargin">
        <number>10</number>
       </property>
-      <item>
-       <layout class="QVBoxLayout" name="info_layout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>API URL: </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="apiurl_label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="cursor">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
-            <property name="text">
-             <string>https://api-minecraft.yuaner.tw/</string>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>模組資料夾：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="modsFolder_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="cursor">
-               <cursorShape>IBeamCursor</cursorShape>
-              </property>
-              <property name="text">
-               <string>/home/yuan/.local/share/PrismLauncher/instances/Barian/minecraft/mods/</string>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>prefix:</string>
-              </property>
-             </widget>
-            </item>
-            <item alignment="Qt::AlignmentFlag::AlignRight">
-             <widget class="QLabel" name="prefix_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="cursor">
-               <cursorShape>IBeamCursor</cursorShape>
-              </property>
-              <property name="text">
-               <string>barian_</string>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
       <item>
        <layout class="QHBoxLayout" name="bottom_layout">
         <item>
@@ -203,23 +429,104 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="skip_pBtn">
-          <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;跳過下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，但是不阻止Minecraft啟動器，繼續啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 0狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
+         <widget class="QCheckBox" name="finishNoClose_checkBox">
           <property name="text">
-           <string>跳過下載</string>
+           <string>完成後不關閉視窗</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="cancel_pBtn">
-          <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;取消下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，並不啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 1狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <widget class="QWidget" name="process_btnGroup" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="text">
-           <string>取消</string>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="skip_pBtn">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;跳過下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，但是不阻止Minecraft啟動器，繼續啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 0狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>跳過下載</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="cancel_pBtn">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;取消下載&lt;/span&gt;&lt;/p&gt;&lt;p&gt;取消模組同步，並不啟動Minecraft遊戲&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 1狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>取消</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="finished_btnGroup" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_91">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="continue_pBtn">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;繼續啟動遊戲流程&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 0狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>啟動遊戲</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="exit_pBtn">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;結束 不啟動遊戲&lt;/span&gt;&lt;/p&gt;&lt;p&gt;（結束本程式並送出exit 1狀態碼當作有錯誤回報，阻止Minecraft啟動器繼續執行遊戲啟動程序）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>結束</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -233,16 +540,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>847</width>
+     <width>1301</width>
      <height>30</height>
     </rect>
    </property>
   </widget>
  </widget>
- <tabstops>
-  <tabstop>skip_pBtn</tabstop>
-  <tabstop>cancel_pBtn</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>
