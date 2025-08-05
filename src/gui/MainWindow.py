@@ -12,6 +12,7 @@ from mcmods_sync import config
 
 class MainWindow(QMainWindow):
     isSkip = False
+    isFinal = False
     totalProgress = 0
 
     def showInfo(self):
@@ -47,10 +48,12 @@ class MainWindow(QMainWindow):
 
     def skipClick(self):
         self.isSkip = True
+        self.isFinal = False
         self.close()
 
     def cancelClick(self):
         self.isSkip = False
+        self.isFinal = False
         self.close()
 
     def closeEvent(self, event):
@@ -59,14 +62,15 @@ class MainWindow(QMainWindow):
             # 等 thread 結束，阻塞 UI 不太好，可用非阻塞提示用戶
             self.sync_thread.finished.connect(lambda: self.close())  # 結束後再關閉
             event.ignore()  # 先不關閉視窗
-        else:
-            if self.isSkip:
-                event.accept()
-                self.exit_code = 0  # 設定你想傳出的退出碼
+            self.exit_code = 1
 
+        else:
+            if self.isSkip or self.isFinal:
+                event.accept()
+                self.exit_code = 0
             else:
-                event.accept()  # ✅ 先讓 Qt 結束事件流程
-                self.exit_code = 1  # 設定你想傳出的退出碼
+                event.accept()
+                self.exit_code = 1
 
     def start_sync(self):
         self.sync_thread = QThread()
@@ -102,9 +106,8 @@ class MainWindow(QMainWindow):
 
         self.ui.file_progressBar.setValue(int(info["file_progress"] * 100))
 
-    def on_finished(self):
-        # self.startBtn.setEnabled(True)
-        # self.progressBar.setValue(100)
-        print("同步完成")
+    def on_finished(self, success: bool):
+        print("同步完成" if success else "同步被中斷")
+        self.isFinal = True if success else False
         self.close()
 

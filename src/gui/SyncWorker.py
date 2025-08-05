@@ -3,7 +3,7 @@ from PySide6.QtCore import QObject, Signal, QThread
 
 class SyncWorker(QObject):
     progress = Signal(dict)
-    finished = Signal()
+    finished = Signal(bool)  # True=正常完成, False=中斷
 
     def __init__(self):
         super().__init__()
@@ -11,6 +11,7 @@ class SyncWorker(QObject):
     def run(self):
         # 拿到目前的 thread 實體
         thread = QThread.currentThread()
+        interrupted = False
 
         # 傳入中斷檢查函式
         def should_stop():
@@ -24,5 +25,6 @@ class SyncWorker(QObject):
             )
         except KeyboardInterrupt:
             print("Sync 被中止")
+            interrupted = True
         finally:
-            self.finished.emit()
+            self.finished.emit(not interrupted)
