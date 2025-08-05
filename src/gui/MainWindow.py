@@ -24,6 +24,14 @@ class MainWindow(QMainWindow):
             +'</span></a></p></body></html>'
             )
 
+    def extraInfo(self):
+        self.ui.setModFolderMethod_label.setText(config.setModFolderMethod)
+        self.ui.download_mode_label.setText(config.download_mode)
+        self.ui.modsCount_label.setText(str(config.modsCount))
+        self.ui.addModsCount_label.setText(str(config.addModsCount))
+        self.ui.modifyModsCount_label.setText(str(config.modifyModsCount))
+        self.ui.delModsCount_label.setText(str(config.delModsCount))
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -32,7 +40,7 @@ class MainWindow(QMainWindow):
         self.sync_thread = None
 
         # 隱藏目前暫無功能的Layout
-        self.ui.extra_widget.setVisible(False)
+        # self.ui.extra_widget.setVisible(False)
         self.ui.step_widget.setVisible(False)
 
         # 建立 stream 並連接
@@ -53,6 +61,8 @@ class MainWindow(QMainWindow):
         self.ui.exit_pBtn.clicked.connect(self.cancelClick)
         
         self.ui.finished_btnGroup.setVisible(False)
+        
+        self.extraInfo()
 
     def append_text(self, text):
         self.ui.output_textBrowser.moveCursor(QTextCursor.End)
@@ -105,6 +115,7 @@ class MainWindow(QMainWindow):
 
     def on_start(self):
         self.ui.total_progressBar.setValue(0)
+        self.extraInfo()
 
     def on_progress(self, info: dict):
         self.ui.total_progressBar.setValue(int(info["total"] * 100))
@@ -121,6 +132,8 @@ class MainWindow(QMainWindow):
             self.ui.file_progressBar.setValue(int(info["step_progress"] * 100))
         else:
             self.ui.file_progressBar.setValue(int(info["file_progress"] * 100))
+        
+        self.extraInfo()
 
     def on_finished(self, success: bool):
         print("同步完成" if success else "同步被中斷")

@@ -288,7 +288,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QLabel" name="label">
+                   <widget class="QLabel" name="setModFolderMethod_label">
                     <property name="text">
                      <string>Prism Launcher 環境變數</string>
                     </property>
@@ -309,7 +309,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    </widget>
                   </item>
                   <item row="4" column="1">
-                   <widget class="QLabel" name="label_4">
+                   <widget class="QLabel" name="addModsCount_label">
                     <property name="text">
                      <string>0</string>
                     </property>
@@ -323,7 +323,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    </widget>
                   </item>
                   <item row="5" column="1">
-                   <widget class="QLabel" name="label_9">
+                   <widget class="QLabel" name="modifyModsCount_label">
                     <property name="text">
                      <string>0</string>
                     </property>
@@ -337,14 +337,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    </widget>
                   </item>
                   <item row="6" column="1">
-                   <widget class="QLabel" name="label_11">
+                   <widget class="QLabel" name="delModsCount_label">
                     <property name="text">
                      <string>0</string>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QLabel" name="label_13">
+                   <widget class="QLabel" name="download_mode_label">
                     <property name="text">
                      <string>ZIP整包下載</string>
                     </property>
@@ -358,7 +358,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QLabel" name="label_15">
+                   <widget class="QLabel" name="modsCount_label">
                     <property name="text">
                      <string>53</string>
                     </property>

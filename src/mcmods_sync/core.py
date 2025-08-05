@@ -29,6 +29,11 @@ def get_sync_plan(client: dict[str, str], server: dict[str, str]) -> tuple[list[
         if filename not in server:
             to_delete.append(filename)
 
+    # GUI顯示Extra資訊
+    config.addModsCount = len(to_add)
+    config.modifyModsCount = len(to_update)
+    config.delModsCount = len(to_delete)
+
     return to_add, to_update, to_delete
 
 def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
@@ -140,6 +145,10 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
             
             if should_stop and should_stop():
                 raise KeyboardInterrupt("中止同步作業")
+
+            # GUI顯示Extra資訊
+            config.download_mode = 'zip整包下載'
+
             server.downloadModFileZip(outputCli, progress_callback=file_progress_cb, should_stop=should_stop, filename_holder=filename_holder)
 
         except Exception as e:
@@ -149,6 +158,8 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
     # 若 zip 模式沒用 or zip 模式失敗，就逐一下載
     if not use_zip or zip_failed:
         pm.start_step("download", file_count=processCount)
+        # GUI顯示Extra資訊
+        config.download_mode = '單檔逐一下載'
         for i, downloadFilename in enumerate(addFilenames + updateFilenames):
             if should_stop and should_stop():
                 raise KeyboardInterrupt("中止同步作業")

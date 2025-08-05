@@ -34,6 +34,7 @@ def main():
         folderPath = QFileDialog.getExistingDirectory(window, "選擇 Minecraft mods 資料夾")
         if folderPath:
             mods_dir = Path(folderPath)
+            config.setModFolderMethod = '手動指定'
         else:
             # ❌ 使用者未選擇資料夾，程式中止
             msgBox = QMessageBox()

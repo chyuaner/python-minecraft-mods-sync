@@ -82,14 +82,17 @@ def detect_mods_dir(args=None) -> Path|None:
 
     # 1. 手動參數
     if args.manual_path:
+        config.setModFolderMethod = '手動參數指定'
         return Path(args.manual_path)
 
     # 2. --inst 參數
     if args.inst:
+        config.setModFolderMethod = '--inst參數指定'
         return Path(args.inst) / "mods"
 
     # 3. 環境變數
     if "INST_MC_DIR" in os.environ:
+        config.setModFolderMethod = 'INST_MC_DIR 環境變數'
         return Path(os.environ["INST_MC_DIR"]) / "mods"
 
     # 4. 判斷執行檔目錄是否為 Minecraft 實例資料夾
@@ -99,6 +102,7 @@ def detect_mods_dir(args=None) -> Path|None:
         exec_path = Path(__file__).resolve().parent
 
     if is_minecraft_instance_dir(exec_path):
+        config.setModFolderMethod = '自動判定當前目錄'
         return exec_path / "mods"
 
     # 5. 無法判斷

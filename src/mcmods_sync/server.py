@@ -36,6 +36,9 @@ class Server:
                         "downloadUrl": mod.get("downloadUrl") or mod.get("download") or "",
                     }
                     self.modsList.append(mod_info)
+        
+        # GUI顯示Extra資訊
+        config.modsCount = len(self.modsList)
 
         return response
 
