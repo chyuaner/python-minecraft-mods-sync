@@ -34,7 +34,8 @@ jobs:
         run: pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
 
       - name: Build GUI
-        run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui --paths ./src
+        run: pyinstaller --onefile main_gui.py --name mcmods-sync-gui --paths ./src
+        # run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui --paths ./src
 
       # Linux 壓縮
       - name: Compress artifact (Linux)
