@@ -124,8 +124,13 @@ class MainWindow(QMainWindow):
 
     def on_finished(self, success: bool):
         print("同步完成" if success else "同步被中斷")
+        step_label_text = f"同步完成"
+        self.ui.step_label.setText(step_label_text)
+        
         self.isFinal = True if success else False
 
+        # self.ui.finishNoClose_checkBox.setChecked(True)
+        self.ui.finishNoClose_checkBox.setDisabled(True)
         self.ui.process_btnGroup.setVisible(False)
         self.ui.finished_btnGroup.setVisible(True)
 

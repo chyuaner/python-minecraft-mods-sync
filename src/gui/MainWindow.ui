@@ -512,7 +512,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;繼續啟動遊戲流程&lt;/p&gt;&lt;p&gt;（具體來說會結束本程式並送出exit 0狀態碼）&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>啟動遊戲</string>
+              <string>繼續</string>
              </property>
             </widget>
            </item>
