@@ -45,8 +45,12 @@ jobs:
         run: pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
 
       - name: Build GUI
+        if: runner.os == 'macOS' || runner.os == 'Windows' 
         run: pyinstaller --onefile main_gui.py --name mcmods-sync-gui --paths ./src
         # run: pyinstaller --noconsole main_gui.py --name mcmods-sync-gui --paths ./src
+      - name: Build GUI (Linux)
+        if: runner.os == 'Linux'
+        run: pyinstaller --onefile main_gui.py --name mcmods-sync-gui --paths ./src --add-binary /usr/lib/qt6/plugins/styles/libbreeze.so:PySide6/Qt/plugins/styles
 
       # Linux 壓縮
       - name: Compress artifact (Linux)
