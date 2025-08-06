@@ -1,5 +1,5 @@
 from . import config
-from .files import getRawFilename
+from .files import getRawFilename, getFilenameFromServerRawFilename
 from urllib.parse import urljoin
 from pathlib import Path
 import requests
@@ -15,7 +15,7 @@ class Server:
 
     def __init__(self):
         pass
-    
+
     def fetchMods(self, outputCli: bool = False) -> requests.Response:
         url = urljoin(self.baseUrl, 'mods/?type=json')
         response = requests.get(url)
@@ -43,11 +43,11 @@ class Server:
         return response
 
     def getModHashes(self) -> dict:
-        hash_dict = { mod["filename"]: mod["sha1"] for mod in self.modsList }
+        hash_dict = { getFilenameFromServerRawFilename(mod["filename"]): mod["sha1"] for mod in self.modsList }
         return hash_dict
 
     def getModFileDownloadUrls(self) -> dict:
-        download_dict = { mod["filename"]: mod["downloadUrl"] for mod in self.modsList }
+        download_dict = { getFilenameFromServerRawFilename(mod["filename"]): mod["downloadUrl"] for mod in self.modsList }
         return download_dict
 
     def downloadModFile(self, filename: str, outputCli: bool = False, progress_callback = None, should_stop=None):
@@ -158,7 +158,7 @@ class Server:
                     raise KeyboardInterrupt("中止同步作業")
 
                 original_path = Path(member.filename)
-                new_parts = [prefix + part for part in original_path.parts]
+                new_parts = [getRawFilename(part) for part in original_path.parts]
                 new_path = extract_to.joinpath(*new_parts)
                 new_path.parent.mkdir(parents=True, exist_ok=True)
 

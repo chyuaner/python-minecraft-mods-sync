@@ -28,7 +28,11 @@ def getFilenameFromRawFilename(raw_filename : str) -> str:
     return raw_filename.removeprefix(config.prefix)
 
 def getRawFilename(filename : str) -> str:
-    return config.prefix+filename
+    return config.prefix+getFilenameFromServerRawFilename(filename)
+
+def getFilenameFromServerRawFilename(filename : str) -> str:
+    suffix = '.client'
+    return filename.removesuffix(suffix)
 
 def remove(filename : str, outputCli: bool = False):
     dest_path = Path(config.mods_path) / getRawFilename(filename)
