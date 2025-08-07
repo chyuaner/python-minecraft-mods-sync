@@ -5,9 +5,28 @@ import hashlib
 def hashFolder():
     pass
 
+# 搜尋檔名帶有prefix的檔名和資料夾
 def getFilePaths():
     mods_dir = Path(config.mods_path)
-    jar_files = list(mods_dir.rglob(config.prefix+"*.jar"))
+    prefix = config.prefix
+    jar_files = []
+    
+    for path in mods_dir.rglob(f"{prefix}*.jar"):
+        # 取得 path 相對於 mods_dir 的路徑部分（只留下子路徑）
+        try:
+            relative_parts = path.relative_to(mods_dir).parts
+        except ValueError:
+            # 如果 path 不在 mods_dir 之下（理論上不會發生），跳過
+            continue
+
+        # 檢查所有中繼資料夾是否都以 barian_ 開頭（不檢查檔案本身）
+        all_dirs_valid = all(
+            part.startswith(prefix) for part in relative_parts[:-1]  # 最後一個是檔名
+        )
+
+        if all_dirs_valid:
+            jar_files.append(path)
+
     return jar_files
 
 def get_sha1(file_path: Path) -> str:
