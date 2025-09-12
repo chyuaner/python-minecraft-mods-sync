@@ -10,14 +10,13 @@ import re
 
 class Server:
     # A class variable, counting the number of robots
-    baseUrl = config.mcapiserver_url
     modsList = []
 
     def __init__(self):
         pass
 
     def fetchMods(self, outputCli: bool = False) -> requests.Response:
-        url = urljoin(self.baseUrl, 'mods/?type=json')
+        url = urljoin(config.mcapiserver_url, 'mods/?type=json')
         response = requests.get(url)
         if outputCli:
             print(f"連接伺服器: {response.status_code} "+url)
@@ -83,6 +82,7 @@ class Server:
             print(f"下載失敗: {response.status_code} "+url)
     
     def downloadModFileZip(self, outputCli: bool = False, progress_callback=None, should_stop=None, filename_holder: list[str] = None):
+        
         def extract_filename_from_disposition(disposition: str) -> str:
             # RFC 5987: filename*=UTF-8''...
             match = re.search(r"filename\*\s*=\s*(?:UTF-8'')?([^;\r\n]+)", disposition, re.IGNORECASE)
@@ -100,7 +100,7 @@ class Server:
             return "all_mods.zip"
 
         extract_to = Path(config.mods_path)
-        url = urljoin(self.baseUrl, 'zip/mods')
+        url = urljoin(config.mcapiserver_url, 'zip/mods')
         prefix = config.prefix
 
         if outputCli:

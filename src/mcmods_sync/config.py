@@ -9,6 +9,9 @@ def setEnv(mods_path_: str|Path, prefix_: str = prefix, url_: str = mcapiserver_
     mods_path = mods_path_
     prefix = prefix_
     mcapiserver_url = url_
+
+def getDefault():
+    return mcapiserver_url, prefix, mods_path
     
 setModFolderMethod = '--'
 download_mode = '--'

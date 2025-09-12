@@ -27,6 +27,7 @@ def parse_args():
 def main():
     # print(mods_dir)
     global mods_dir
+    dMcapiserver_url, dPrefix, dMods_path = config.getDefault()
 
     app = QApplication(sys.argv)
     if mods_dir is None:
@@ -52,7 +53,12 @@ def main():
             msgBox.exec()
             sys.exit(1)
             
-    config.setEnv(mods_dir)
+    
+    remote_url = dMcapiserver_url
+    if args.remote:
+        remote_url = args.remote
+
+    core.setEnv(mods_dir, dPrefix, remote_url)
 
     win = MainWindow()
     win.show()

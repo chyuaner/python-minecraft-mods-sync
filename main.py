@@ -62,6 +62,9 @@ def parse_args(parser = argparse.ArgumentParser(description="Minecraft mods sync
     # PrismCraft Launcher 使用的 instance 路徑
     parser.add_argument("--inst", help="Minecraft instance path (for PCL Launcher)")
 
+    # PrismCraft Launcher 使用的 instance 路徑
+    parser.add_argument("--remote", help="API伺服器位址")
+
     return parser.parse_args()
 
 def is_minecraft_instance_dir(path: Path) -> bool:
@@ -112,6 +115,8 @@ def main():
     args = parse_args()
     mods_dir = detect_mods_dir(args)
 
+    dMcapiserver_url, dPrefix, dMods_path = config.getDefault()
+
     if mods_dir is None:
         # 5. 失敗提示
         print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
@@ -125,9 +130,12 @@ def main():
     if not mods_dir.exists():
         print("⚠️ mods 資料夾不存在，將自動建立")
         mods_dir.mkdir(parents=True)
+    
+    remote_url = dMcapiserver_url
+    if args.remote:
+        remote_url = args.remote
 
-    # print(mods_dir)
-    config.setEnv(mods_dir)
+    core.setEnv(mods_dir, dPrefix, remote_url)
     core.run(True)
 
 if __name__ == "__main__":
