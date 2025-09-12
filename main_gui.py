@@ -52,13 +52,8 @@ def main():
             )
             msgBox.exec()
             sys.exit(1)
-            
-    
-    remote_url = dMcapiserver_url
-    if args.remote:
-        remote_url = args.remote
 
-    core.setEnv(mods_dir, dPrefix, remote_url)
+    core.setEnv(mods_dir, args.prefix, args.remote)
 
     win = MainWindow()
     win.show()

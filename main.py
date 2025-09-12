@@ -56,14 +56,20 @@ from mcmods_sync import core, config
 
 def parse_args(parser = argparse.ArgumentParser(description="Minecraft mods sync script")):
     
+    # 載入預設參數
+    dMcapiserver_url, dPrefix, dMods_path = config.getDefault()
+    
+
     # 手動指定 mods 資料夾路徑
     parser.add_argument("manual_path", nargs="?", help="Minecraft mods path (manual mode)")
 
     # PrismCraft Launcher 使用的 instance 路徑
     parser.add_argument("--inst", help="Minecraft instance path (for PCL Launcher)")
+    
+    parser.add_argument("--prefix", help="模組檔名前綴字", default=dPrefix)
 
-    # PrismCraft Launcher 使用的 instance 路徑
-    parser.add_argument("--remote", help="API伺服器位址")
+    # 伺服器位址
+    parser.add_argument("--remote", help="API伺服器位址", default=dMcapiserver_url)
 
     return parser.parse_args()
 
@@ -115,8 +121,6 @@ def main():
     args = parse_args()
     mods_dir = detect_mods_dir(args)
 
-    dMcapiserver_url, dPrefix, dMods_path = config.getDefault()
-
     if mods_dir is None:
         # 5. 失敗提示
         print("❌ 無法判斷 Minecraft mods 資料夾路徑！")
@@ -130,12 +134,8 @@ def main():
     if not mods_dir.exists():
         print("⚠️ mods 資料夾不存在，將自動建立")
         mods_dir.mkdir(parents=True)
-    
-    remote_url = dMcapiserver_url
-    if args.remote:
-        remote_url = args.remote
 
-    core.setEnv(mods_dir, dPrefix, remote_url)
+    core.setEnv(mods_dir, args.prefix, args.remote)
     core.run(True)
 
 if __name__ == "__main__":
