@@ -100,7 +100,7 @@ class Server:
             return "all_mods.zip"
 
         extract_to = Path(config.mods_path)
-        url = urljoin(config.mcapiserver_url, 'zip/mods')
+        url = urljoin(config.mcapiserver_url, 'mods/zip')
         prefix = config.prefix
 
         if outputCli:
