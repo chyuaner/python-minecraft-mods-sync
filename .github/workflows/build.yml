@@ -30,6 +30,9 @@ jobs:
         run: |
           pyside6-uic src/gui/MainWindow.ui -o src/gui/ui_mainwindow.py
 
+      - name: Run client unit tests
+        run: python -m unittest discover -s tests -v
+
       - name: Build CLI
         run: pyinstaller --onefile main.py --name mcmods-sync-cli --paths ./src
 
@@ -92,6 +95,7 @@ jobs:
             mcmods-sync-gui-*.tar.gz
 
   release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: pyinstaller-build
     runs-on: ubuntu-latest
     steps:

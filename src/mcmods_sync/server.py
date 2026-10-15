@@ -1,4 +1,5 @@
 from . import config
+from .download_source import select_download_url
 from .files import getRawFilename, getFilenameFromServerRawFilename
 from urllib.parse import urljoin
 from pathlib import Path
@@ -13,11 +14,14 @@ class Server:
     modsList = []
 
     def __init__(self):
-        pass
+        # Each sync must read a fresh manifest; the original class attribute
+        # incorrectly retained files from previous Server instances.
+        self.modsList = []
 
     def fetchMods(self, outputCli: bool = False) -> requests.Response:
         url = urljoin(config.mcapiserver_url, 'mods/?type=json')
-        response = requests.get(url)
+        response = requests.get(url, timeout=(5, 30))
+        response.raise_for_status()
         if outputCli:
             print(f"連接伺服器: {response.status_code} "+url)
 
@@ -33,9 +37,13 @@ class Server:
                         "filename": mod.get("filename", ""),
                         "sha1": mod.get("sha1", ""),
                         "downloadUrl": mod.get("downloadUrl") or mod.get("download") or "",
+                        "serverDownloadUrl": mod.get("serverDownloadUrl") or (mod.get("links") or {}).get("serverDownloadUrl") or "",
                     }
                     self.modsList.append(mod_info)
         
+        else:
+            raise ValueError("伺服器 /mods 回傳了無效的 JSON 清單")
+
         # GUI顯示Extra資訊
         config.modsCount = len(self.modsList)
 
@@ -45,41 +53,57 @@ class Server:
         hash_dict = { getFilenameFromServerRawFilename(mod["filename"]): mod["sha1"] for mod in self.modsList }
         return hash_dict
 
-    def getModFileDownloadUrls(self) -> dict:
-        download_dict = { getFilenameFromServerRawFilename(mod["filename"]): mod["downloadUrl"] for mod in self.modsList }
-        return download_dict
+    def getModFileDownloadUrls(self, filenames=None) -> dict:
+        # Do not reject an unrelated, already-installed mod just because its
+        # optional origin URL is absent; validate only actual downloads.
+        selected = set(filenames) if filenames is not None else None
+        return {
+            name: select_download_url(mod, prefer_server=config.prefer_server)
+            for mod in self.modsList
+            if (name := getFilenameFromServerRawFilename(mod["filename"])) and
+               (selected is None or name in selected)
+        }
 
     def downloadModFile(self, filename: str, outputCli: bool = False, progress_callback = None, should_stop=None):
 
         rawFilename = getRawFilename(filename)
         dest_path = Path(config.mods_path) / rawFilename
-        url = self.getModFileDownloadUrls()[filename]
-        response = requests.get(url, stream=True)
+        url = self.getModFileDownloadUrls([filename])[filename]
+        response = requests.get(url, stream=True, timeout=(5, 60))
+        response.raise_for_status()
         total_length_str = response.headers.get('Content-Length')
         if outputCli:
             print(f"下載: {response.status_code} "+url + " → " + str(dest_path))
 
         if response.status_code == 200:
+            import os
+            from .files import get_sha1
             downloaded_length = 0
-            with open(dest_path, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if should_stop and should_stop():
-                        raise KeyboardInterrupt("中止同步作業")
-                    if chunk:
-                        f.write(chunk)
-                        downloaded_length += len(chunk)
+            temp_path = dest_path.with_name(dest_path.name + ".mcmods_sync.part")
+            try:
+                with open(temp_path, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if should_stop and should_stop():
+                            raise KeyboardInterrupt("中止同步作業")
+                        if chunk:
+                            f.write(chunk)
+                            downloaded_length += len(chunk)
 
-                        if progress_callback:
-                            if total_length_str is not None:
-                                total_length = int(total_length_str)
-                                progress = int(downloaded_length / total_length * 100)
-                                progress_callback(progress)
-                            else:
-                                progress = int(0)
-                                progress_callback(progress)
+                            if progress_callback:
+                                if total_length_str is not None:
+                                    total_length = int(total_length_str)
+                                    progress = int(downloaded_length / total_length * 100) if total_length else 0
+                                    progress_callback(progress)
+                                else:
+                                    progress = int(0)
+                                    progress_callback(progress)
                     
-        else:
-            print(f"下載失敗: {response.status_code} "+url)
+                expected_sha1 = self.getModHashes().get(filename)
+                if expected_sha1 and get_sha1(temp_path).lower() != expected_sha1.lower():
+                    raise ValueError(f"下載檔案 SHA1 不符：{filename}")
+                os.replace(temp_path, dest_path)
+            finally:
+                temp_path.unlink(missing_ok=True)
     
     def downloadModFileZip(self, outputCli: bool = False, progress_callback=None, should_stop=None, filename_holder: list[str] = None):
         
@@ -106,7 +130,7 @@ class Server:
         if outputCli:
             print(f"開始下載: " + url)
 
-        response = requests.get(url, stream=True)
+        response = requests.get(url, stream=True, timeout=(5, 60))
         response.raise_for_status()
 
         total_length_str = response.headers.get('Content-Length')
