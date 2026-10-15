@@ -70,6 +70,7 @@ def parse_args(parser = argparse.ArgumentParser(description="Minecraft mods sync
 
     # 伺服器位址
     parser.add_argument("--remote", help="API伺服器位址", default=dMcapiserver_url)
+    parser.add_argument("--prefer-server", action="store_true", help="優先使用自建伺服器下載模組（不使用外部 CDN）")
 
     return parser.parse_args()
 
@@ -136,6 +137,7 @@ def main():
         mods_dir.mkdir(parents=True)
 
     core.setEnv(mods_dir, args.prefix, args.remote)
+    config.prefer_server = args.prefer_server
     core.run(True)
 
 if __name__ == "__main__":

@@ -14,6 +14,8 @@ from mcmods_sync import core, config
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Minecraft mods sync script")
+    parser.add_argument("--configure", action="store_true",
+                        help="顯示設定介面並等待按下『開始同步』；預設維持啟動器的自動同步行為")
 
     # 預計增加視窗化獨有參數
     # # 手動指定 mods 資料夾路徑
@@ -54,10 +56,13 @@ def main():
             sys.exit(1)
 
     core.setEnv(mods_dir, args.prefix, args.remote)
+    config.prefer_server = args.prefer_server
 
     win = MainWindow()
+    win.set_manual_start(args.configure)
     win.show()
-    win.start_sync()
+    if not args.configure:
+        win.start_sync()
     app.exec()
     sys.exit(win.exit_code)
 

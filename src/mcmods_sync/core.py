@@ -84,7 +84,7 @@ def sync(outputCli: bool = False, progress_callback=None, should_stop=None):
 
     # 下載步驟開始
     # 若要處理的比例過高，嘗試走 zip 打包下載模式
-    use_zip = (processCount / serverFileCount) > 0.7
+    use_zip = bool(serverFileCount) and (processCount / serverFileCount) > 0.7
     zip_failed = False
 
     # === 根據條件啟用步驟 ===

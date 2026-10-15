@@ -38,6 +38,12 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)  # 將 UI 佈局設到 self (QMainWindow)
         self.showInfo()
         self.sync_thread = None
+        self._sync_succeeded = False
+        self._close_requested = False
+        self.ui.preferServer_checkBox.setChecked(bool(config.prefer_server))
+        self.ui.preferServer_checkBox.toggled.connect(self.set_prefer_server)
+        self.ui.startSync_pBtn.clicked.connect(self.start_sync)
+        self.ui.startSync_pBtn.setVisible(False)
 
         # 隱藏目前暫無功能的Layout
         # self.ui.extra_widget.setVisible(False)
@@ -58,7 +64,7 @@ class MainWindow(QMainWindow):
         self.ui.skip_pBtn.clicked.connect(self.skipClick)
         self.ui.cancel_pBtn.clicked.connect(self.cancelClick)
         self.ui.continue_pBtn.clicked.connect(self.skipClick)
-        self.ui.exit_pBtn.clicked.connect(self.cancelClick)
+        self.ui.exit_pBtn.clicked.connect(self.exitClick)
         
         self.ui.finished_btnGroup.setVisible(False)
         
@@ -78,13 +84,19 @@ class MainWindow(QMainWindow):
         self.isFinal = False
         self.close()
 
+    def exitClick(self):
+        # Successful sync must return exit 0 even when the window was kept open.
+        self.isSkip = False
+        self.isFinal = self._sync_succeeded
+        self.close()
+
     def closeEvent(self, event):
         self.exit_code = 0
         if self.sync_thread and self.sync_thread.isRunning():
             self.sync_thread.requestInterruption()
             # 等 thread 結束，阻塞 UI 不太好，可用非阻塞提示用戶
-            self.sync_thread.finished.connect(lambda: self.close())  # 結束後再關閉
-            event.ignore()  # 先不關閉視窗
+            self._close_requested = True
+            event.ignore()  # Worker/Thread 完全結束後才允許關閉
             self.exit_code = 1
 
         else:
@@ -95,13 +107,25 @@ class MainWindow(QMainWindow):
                 event.accept()
                 self.exit_code = 1
 
+    def set_manual_start(self, manual: bool):
+        # Launcher invocation retains immediate synchronization by default.
+        # Manual mode provides a chance to choose an origin before starting.
+        self.ui.startSync_pBtn.setVisible(bool(manual))
+
+    def set_prefer_server(self, enabled: bool):
+        config.prefer_server = bool(enabled)
+
     def start_sync(self):
+        self.ui.startSync_pBtn.setEnabled(False)
+        self.ui.preferServer_checkBox.setEnabled(False)
+        self._sync_succeeded = False
         self.sync_thread = QThread()
         self.worker = SyncWorker()
         self.worker.moveToThread(self.sync_thread)
 
         self.sync_thread.started.connect(self.worker.run)
         self.worker.progress.connect(self.on_progress)
+        self.worker.error.connect(self.on_error)
         self.worker.finished.connect(self.on_finished)
         self.worker.finished.connect(self.sync_thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
@@ -135,14 +159,17 @@ class MainWindow(QMainWindow):
         
         self.extraInfo()
 
-    def on_finished(self, success: bool):
-        print("同步完成" if success else "同步被中斷")
-        step_label_text = f"同步完成"
-        self.ui.step_label.setText(step_label_text)
-        
-        self.isFinal = True if success else False
+    def on_error(self, message: str):
+        self.append_text(f"\n{message}\n")
 
-        # self.ui.finishNoClose_checkBox.setChecked(True)
+    def on_finished(self, success: bool):
+        print("同步完成" if success else "同步失敗或已取消")
+        self.ui.step_label.setText("同步完成" if success else "同步失敗或已取消")
+        self.isFinal = bool(success)
+        self._sync_succeeded = bool(success)
+        if not success:
+            # Leave logs visible; game must not start after a failed sync.
+            self.ui.finishNoClose_checkBox.setChecked(True)
         self.ui.finishNoClose_checkBox.setDisabled(True)
         self.ui.process_btnGroup.setVisible(False)
         self.ui.finished_btnGroup.setVisible(True)
@@ -150,7 +177,9 @@ class MainWindow(QMainWindow):
     
     def clear_sync_thread(self):
         self.sync_thread = None
-        if self.ui.finishNoClose_checkBox.isChecked() is not True:
+        if self._close_requested:
+            self.close()
+        elif self._sync_succeeded and not self.ui.finishNoClose_checkBox.isChecked():
             self.close()
 
 

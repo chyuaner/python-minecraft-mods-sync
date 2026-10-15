@@ -379,6 +379,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="downloadSource_layout">
+      <item>
+       <widget class="QCheckBox" name="preferServer_checkBox">
+        <property name="toolTip">
+         <string>若以啟動器自動同步，請使用 --prefer-server；以 --configure 啟動 GUI 則可以在同步前選擇。</string>
+        </property>
+        <property name="text">
+         <string>優先從自建伺服器下載（不使用公開 CDN）</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="startSync_pBtn">
+        <property name="text">
+         <string>開始同步</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QGroupBox" name="step_layout">
       <property name="title">
        <string/>
